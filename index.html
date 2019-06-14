@@ -1,7 +1,64 @@
 <!DOCTYPE html>
 <html>
-	<body>
-		<h1>Main Page</h1>
-		<p>Currently WIP</p>
-	</body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/fontawesome.css">
+</head>
+<body>
+
+<div class="header">
+    <h2><img src="images/logo.png" style="float:left;height:150px;">SilMon's Blog</h2>
+    <ul>
+        <li class="headerlistli"><i class="fas fa-camera-retro"> Image Processing</i></li>
+        <li class="headerlistli"><i class="fab fa-python"> Programming</i></li>
+        <li class="headerlistli"><i class="fas fa-graduation-cap"> Machine Learning</i></li>
+    </ul>
+</div>
+
+<div class="row">
+    <div class="leftcolumn">
+        <div class="card">
+            <div class="teaserimg">
+                <h2>Arbitrary Image Rotation using Shearing</h2>
+                <h5>A description of the Paeth Algorithm, 14.06.2019</h5>
+                <img style="width: 100%" src="images/paeth_teaser.png">
+                <p style="width: auto">In the modern world of image processing, nobody thinks about about “simple” tasks
+                    such as
+                    the rotation,shearing or mirroring of an image because such functions have become so standardized,
+                    that even
+                    the simplest photoviewers include them. Nevertheless, besides their abundance, a lot of programmers
+                    do not know the underlying algorithms...</p>
+            </div>
+        </div>
+    </div>
+    <div class="rightcolumn">
+        <div class="card">
+            <h2>About Me</h2>
+            <p>Biotechnologist and currently PhD student in the field of bioinformatics</p>
+        </div>
+        <div class="card">
+            <h3>Recommended Articles</h3>
+            <div class="shortpost">Arbitrary Image Rotation</div>
+            <br>
+            <div class="shortpost">Creation of a simple Classifier with TensorFlow</div>
+            <br>
+            <div class="shortpost">Processing of Immunofluorescence Images</div>
+        </div>
+        <div class="card">
+            <h3>Some links</h3>
+            <ul>
+                <li><a href="https://github.com/SilMon" title="My github profile"><i class="fab fa-github"></i>
+                    Github</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <p>Personal blog about programming, digital image processing, and machine learning</p>
+</div>
+
+</body>
 </html>

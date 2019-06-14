@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="../css/style.css">
+    <link rel="stylesheet" type="text/css" href="../css/fontawesome.css">
+</head>
+<body>
+
+<div class="header">
+    <h2>SilMon's Blog</h2>
+    <ul>
+        <li class="headerlistli"><i class="fas fa-camera-retro"> Image Processing</i></li>
+        <li class="headerlistli"><i class="fab fa-python"> Programming</i></li>
+        <li class="headerlistli"><i class="fas fa-graduation-cap"> Machine Learning</i></li>
+    </ul>
+</div>
+
+<div class="row">
+    <div class="leftcolumn">
+        <div class="card">
+            <div class="teaserimg">
+                <h1>Arbitrary Image Rotation using Shearing</h1>
+                <h5>A description of the Paeth Algorithm, 14.06.2019</h5>
+                <p>In the modern world of image processing, nobody thinks about about
+                    “simple” tasks such as the rotation, shearing or mirroring of an image
+                    because such functions have become so standardized, that even the
+                    simplest photoviewers include them. Nevertheless, besides their
+                    abundance, a lot of programmers do not know the underlying algorithms.
+                    Whilst it is easy to understand the short transformation algorithms for shearing or mirroring
+                    (which only include a few calculations and/or
+                    assignment of values), algorithms for rotation of matrices (such as
+                    images) through an arbitrary angle are more complex in comparison.</p>
+                <p>One of my favourite algorithms in the one presented by <b>Alan W. Paeth</b> in the year 1986 (<a
+                        href="http://www.cipprs.org/papers/VI/VI1986/pp077-081-Paeth-1986.pdf">Graphics Interface</a>).
+                    In this paper, Paeth describes a rotation algorithm which uses 3 consecutive shear operations to
+                    perform arbitrary angle rotation. In contrast to many other rotation algorithms, Paeths method
+                    produces exact values for for rotations with multiples of 90°</p>
+                <h2>Needed values</h2>
+                <p>
+                    Peath defines 2 values needed to perform the shearing operations:
+                </p>
+                <ul>
+                    <li>α (alpha): Angle for X-Axis rotations</li>
+                    <li>β (beta): Angle for Y-Axis rotations</li>
+                </ul>
+
+                These two angles will be calculated from the given rotation angle θ (theta; in radians) with following
+                formulas:
+                <ul>
+                    <li>α = -tan(θ/2)</li>
+                    <li>β = sin(θ)</li>
+                </ul>
+
+                These angles will then be used to perform the following 3 shear operations:
+                <ol>
+                    <li>x = x + α * y</li>
+                    <li>y = y + β * x</li>
+                    <li>x = x + α * y</li>
+                </ol>
+
+                If applied to each point of the image, these two shears will rotate the image through 45° (around the
+                point 0|0). Due to the fact that the usual coordinate system in programming is upside down, the rotation
+                is counterclockwise.
+
+
+                <h2>Example</h2>
+                Imagine you would like to rotate an image or matrix through 45°. At first, you had to calculate α and β
+                for the shear operations.
+                To do so, you have to keep in mind that the algorithm uses the angle given in radians, so you have to
+                first transform the given angle from degree to radians. This is easy done:
+                <ul>
+                    <li>θ<sub>radians</sub> = θ * 0,0174533 = 45° * 0,0174533 = 0,7853985 rad</li>
+                </ul>
+                If you have the angle given in radians, you are able to calculate the respective shear angles:
+                <ul>
+                    <li>α = -tan(θ/2) = -tan(0,7853985/2) = -0,41 rad</li>
+                    <li>β = sin(θ) = sin(0,7853985) = 0,71 rad</li>
+                </ul>
+                These values are fixed throughout the rest of the algorithm, so the calculation has to be performed only
+                once.
+
+                After the calculation of the shearing angles, each point of the image has to be sheared.
+                I will calculate the sheared points exemplary for 4 different points:
+                <ol>
+                    <li>P(0;0):
+                        <ul>
+                            <li>First shear: x = 0 + (-0,41) * 0 = 0</li>
+                            <li>Second shear: y = 0 + 0.71 * 0 = 0</li>
+                            <li>Third shear: x = 0 + (-0.41) * 0 = 0</li>
+                        </ul>
+                        X= 0 | Y= 0
+                    </li>
+                    <li>P(1;0):
+                        <ul>
+                            <li>First shear: x = 1 + 0,41 * 0 = 1</li>
+                            <li>Second shear: y = 0 + 0.71 * 1 = 0.71</li>
+                            <li>Third shear: x = 1 + (-0.41 * 0.71) = 0.708</li>
+                        </ul>
+                        X= 0.708 | Y= 0.71
+                    </li>
+
+                    <li>P(0;1):
+                        <ul>
+                            <li>First shear: x = 0 + (-0,41) * 1 = -0.41</li>
+                            <li>Second shear: y = 1 + 0.71 * (-0.41) = 0.707</li>
+                            <li>Third shear: x = -0.41 + (-0.41) * 0-707 = -0.71</li>
+                        </ul>
+                        X= -0.71 | Y= 0.707
+                    </li>
+                    <li>P(1;1):
+                        <ul>
+                            <li>First shear: x = 1 + (-0,41) * 0 = 0.59</li>
+                            <li>Second shear: y = 1 + 0.71 * 0.59 = 1.41</li>
+                            <li>Third shear: x = 0.59 + (-0.41) * 1.41 = 0.00</li>
+                        </ul>
+                        X= 0.00 | Y= 1.41
+                    </li>
+                </ol>
+
+                To use this values in an program, it's necessary to "normalize" them, meaning to eliminate all negative
+                values. This can be done by determining the minimum value of each axis and add it to all calculated
+                values, This ensures, that the minimal value is 0.
+
+                <h2>Implementation</h2>
+                <p>
+                    Here's an examplary implementation in Java:
+                    <figure><img
+                            src="https://66.media.tumblr.com/ea3706c44df13520f42496428df18c76/tumblr_p0ecy95rpA1uhkil3o1_540.png"
+                            alt="Exemplary code sample">
+                        <figcaption><em>Note: ShiftPoint is an arbitrary class that is able to hold the coordinates of a
+                            point as well as its assigned value. It also enables to shift it's coordinates by a given
+                            value.</em></figcaption>
+                    </figure>
+                    <figure><img
+                            src="https://66.media.tumblr.com/58ffa4fcaad7f1f33940bc695775237a/tumblr_p0ed0sYCb41uhkil3o1_540.png"
+                            alt="Graphic representation of the rotation and normalization">
+                        <figcaption><em>Graphic representation of the rotation and normalization</em></figcaption>
+                    </figure>
+                </p>
+            </div>
+        </div>
+    </div>
+    <!-- Must not change -->
+    <div class="rightcolumn">
+        <div class="card">
+            <h2>About Me</h2>
+            <div class="img" style="height:100px;">Image</div>
+            <p>Some text about me in culpa qui officia deserunt mollit anim..</p>
+        </div>
+        <div class="card">
+            <h3>Popular Post</h3>
+            <div class="shortpost">Image</div>
+            <br>
+            <div class="shortpost">Image</div>
+            <br>
+            <div class="shortpost">Image</div>
+        </div>
+        <div class="card">
+            <h3>Some links</h3>
+            <ul>
+                <li><a href="https://github.com/SilMon" title="My github profile"><i class="fab fa-github"></i>
+                    Github</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="footer">
+    <p>Personal blog about programming, digital image processing, and machine learning</p>
+</div>
+
+</body>
+</html>
