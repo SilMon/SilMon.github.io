@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>SilMon's Blog - Image Processing</title><link href="https://silmon.github.io/" rel="alternate"></link><link href="https://silmon.github.io/feeds/image-processing.atom.xml" rel="self"></link><id>https://silmon.github.io/</id><updated>2019-06-16T00:00:00+02:00</updated><subtitle>Personal blog about image processing, programming and machine learning</subtitle><entry><title>Arbitrary Image Rotation using Shearing</title><link href="https://silmon.github.io/arbitrary-image-rotation-using-shearing.html" rel="alternate"></link><published>2019-06-16T00:00:00+02:00</published><updated>2019-06-16T00:00:00+02:00</updated><author><name>SilMon</name></author><id>tag:silmon.github.io,2019-06-16:/arbitrary-image-rotation-using-shearing.html</id><summary type="html">A description of an algorithm for arbitrary
+  image rotation using 3 consecutive shears, published by Alan W. Paeth in the year 1986.</summary><content type="html">
+&lt;p&gt;In the modern world of image processing, nobody thinks about about
+    “simple” tasks such as the rotation, shearing or mirroring of an image
+    because such functions have become so standardized, that even the
+    simplest photoviewers include them. Nevertheless, besides their
+    abundance, a lot of programmers do not know the underlying algorithms.
+    Whilst it is easy to understand the short transformation algorithms for shearing or mirroring
+    (which only include a few calculations and/or
+    assignment of values), algorithms for rotation of matrices (such as
+    images) through an arbitrary angle are more complex in comparison.&lt;/p&gt;
+&lt;p&gt;One of my favourite algorithms in the one presented by &lt;b&gt;Alan W. Paeth&lt;/b&gt; in the year 1986 (&lt;a href="http://www.cipprs.org/papers/VI/VI1986/pp077-081-Paeth-1986.pdf"&gt;Graphics Interface&lt;/a&gt;).
+    In this paper, Paeth describes a rotation algorithm which uses 3 consecutive shear operations to
+    perform arbitrary angle rotation. In contrast to many other rotation algorithms, Paeths method
+    produces exact values for for rotations with multiples of 90°&lt;/p&gt;
+&lt;h2&gt;Needed values&lt;/h2&gt;
+&lt;p&gt;
+    Peath defines 2 values needed to perform the shearing operations:
+&lt;/p&gt;
+&lt;ul&gt;
+    &lt;li&gt;α (alpha): Angle for X-Axis rotations&lt;/li&gt;
+    &lt;li&gt;β (beta): Angle for Y-Axis rotations&lt;/li&gt;
+&lt;/ul&gt;
+
+These two angles will be calculated from the given rotation angle θ (theta; in radians) with following
+formulas:
+&lt;ul&gt;
+    &lt;li&gt;α = -tan(θ/2)&lt;/li&gt;
+    &lt;li&gt;β = sin(θ)&lt;/li&gt;
+&lt;/ul&gt;
+
+These angles will then be used to perform the following 3 shear operations:
+&lt;ol&gt;
+    &lt;li&gt;x = x + α * y&lt;/li&gt;
+    &lt;li&gt;y = y + β * x&lt;/li&gt;
+    &lt;li&gt;x = x + α * y&lt;/li&gt;
+&lt;/ol&gt;
+
+If applied to each point of the image, these two shears will rotate the image through 45° (around the
+point 0|0). Due to the fact that the usual coordinate system in programming is upside down, the rotation
+is counterclockwise.
+
+
+&lt;h2&gt;Example&lt;/h2&gt;
+Imagine you would like to rotate an image or matrix through 45°. At first, you had to calculate α and β
+for the shear operations.
+To do so, you have to keep in mind that the algorithm uses the angle given in radians, so you have to
+first transform the given angle from degree to radians. This is easy done:
+&lt;ul&gt;
+    &lt;li&gt;θ&lt;sub&gt;radians&lt;/sub&gt; = θ * 0,0174533 = 45° * 0,0174533 = 0,7853985 rad&lt;/li&gt;
+&lt;/ul&gt;
+If you have the angle given in radians, you are able to calculate the respective shear angles:
+&lt;ul&gt;
+    &lt;li&gt;α = -tan(θ/2) = -tan(0,7853985/2) = -0,41 rad&lt;/li&gt;
+    &lt;li&gt;β = sin(θ) = sin(0,7853985) = 0,71 rad&lt;/li&gt;
+&lt;/ul&gt;
+These values are fixed throughout the rest of the algorithm, so the calculation has to be performed only
+once.
+
+After the calculation of the shearing angles, each point of the image has to be sheared.
+I will calculate the sheared points exemplary for 4 different points:
+&lt;ol&gt;
+    &lt;li&gt;P(0;0):
+        &lt;ul&gt;
+            &lt;li&gt;First shear: x = 0 + (-0,41) * 0 = 0&lt;/li&gt;
+            &lt;li&gt;Second shear: y = 0 + 0.71 * 0 = 0&lt;/li&gt;
+            &lt;li&gt;Third shear: x = 0 + (-0.41) * 0 = 0&lt;/li&gt;
+        &lt;/ul&gt;
+        X= 0 | Y= 0
+    &lt;/li&gt;
+    &lt;li&gt;P(1;0):
+        &lt;ul&gt;
+            &lt;li&gt;First shear: x = 1 + 0,41 * 0 = 1&lt;/li&gt;
+            &lt;li&gt;Second shear: y = 0 + 0.71 * 1 = 0.71&lt;/li&gt;
+            &lt;li&gt;Third shear: x = 1 + (-0.41 * 0.71) = 0.708&lt;/li&gt;
+        &lt;/ul&gt;
+        X= 0.708 | Y= 0.71
+    &lt;/li&gt;
+
+    &lt;li&gt;P(0;1):
+        &lt;ul&gt;
+            &lt;li&gt;First shear: x = 0 + (-0,41) * 1 = -0.41&lt;/li&gt;
+            &lt;li&gt;Second shear: y = 1 + 0.71 * (-0.41) = 0.707&lt;/li&gt;
+            &lt;li&gt;Third shear: x = -0.41 + (-0.41) * 0-707 = -0.71&lt;/li&gt;
+        &lt;/ul&gt;
+        X= -0.71 | Y= 0.707
+    &lt;/li&gt;
+    &lt;li&gt;P(1;1):
+        &lt;ul&gt;
+            &lt;li&gt;First shear: x = 1 + (-0,41) * 0 = 0.59&lt;/li&gt;
+            &lt;li&gt;Second shear: y = 1 + 0.71 * 0.59 = 1.41&lt;/li&gt;
+            &lt;li&gt;Third shear: x = 0.59 + (-0.41) * 1.41 = 0.00&lt;/li&gt;
+        &lt;/ul&gt;
+        X= 0.00 | Y= 1.41
+    &lt;/li&gt;
+&lt;/ol&gt;
+
+To use this values in an program, it's necessary to "normalize" them, meaning to eliminate all negative
+values. This can be done by determining the minimum value of each axis and add it to all calculated
+values, This ensures, that the minimal value is 0.
+
+&lt;h2&gt;Implementation&lt;/h2&gt;
+&lt;p&gt;
+    Here's an examplary implementation in Java:&lt;br&gt;
+    &lt;img src="https://66.media.tumblr.com/ea3706c44df13520f42496428df18c76/tumblr_p0ecy95rpA1uhkil3o1_540.png" alt="Exemplary code sample" vspace="15"&gt;
+    &lt;br&gt;
+    &lt;em&gt;Graphic representation of the rotation and normalization&lt;/em&gt;
+    &lt;img src="https://66.media.tumblr.com/58ffa4fcaad7f1f33940bc695775237a/tumblr_p0ed0sYCb41uhkil3o1_540.png" alt="Graphic representation of the rotation and normalization" vspace="15"&gt;
+&lt;/p&gt;
+</content><category term="rotation"></category><category term="shearing"></category><category term="java"></category><category term="matrix operations"></category><category term="image&#10;  filters"></category><category term="basic image operations"></category></entry></feed>

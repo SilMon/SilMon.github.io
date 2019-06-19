@@ -1,0 +1,234 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom"><title>SilMon's Blog</title><link href="https://silmon.github.io/" rel="alternate"></link><link href="https://silmon.github.io/feeds/all.atom.xml" rel="self"></link><id>https://silmon.github.io/</id><updated>2019-06-19T00:00:00+02:00</updated><subtitle>Personal blog about image processing, programming and machine learning</subtitle><entry><title>How to build a Discordbot with Python</title><link href="https://silmon.github.io/how-to-build-a-discordbot-with-python.html" rel="alternate"></link><published>2019-06-19T00:00:00+02:00</published><updated>2019-06-19T00:00:00+02:00</updated><author><name>SilMon</name></author><id>tag:silmon.github.io,2019-06-19:/how-to-build-a-discordbot-with-python.html</id><summary type="html">Have you ever wondered how to build a bot for
+  discord? Wonder no longer, here's the answer!</summary><content type="html">
+&lt;h2&gt;1 Setup the bot&lt;/h2&gt;
+&lt;p&gt;
+    The first that needs to be done is to create a bot is to log in into the &lt;a href="https://discordapp.com/"&gt;
+    discord page&lt;/a&gt;. If you have no account, create one. Then switch to the &lt;a href="https://discordapp.com/developers/applications/"&gt;
+    discord developer page&lt;/a&gt; and create a new application: &lt;img src="images/discordbot%231.png" style="display: block" vspace="15"&gt;
+    To get you running you simply need to enter a name for your application: &lt;img src="images/discordbot%232.PNG" style="display: block" vspace="15"&gt;
+    After
+    that's done, you need to change to your created application (simply click on it) and then to bot: &lt;img src="images/discordbot%233.PNG" style="display: block" vspace="15"&gt; There you need to create a bot for your
+    application
+    (Discord will warn you that
+    this action is irreversible, but that's fine, we want this application to have a bot):&lt;img src="images/discordbot%234.PNG" style="display: block" vspace="15"&gt; You can then choose a "profil" name for the
+    bot, which
+    will be displayed
+    int the member list as well as an icon for the bot:&lt;img src="images/discordbot%235.PNG" style="display: block" vspace="15"&gt; The
+    next thing we need is the authorization token, which allows to control the bots actions via the discord API:&lt;img src="images/discordbot%236.PNG" style="display: block" vspace="15"&gt;
+    Do not share this with anyone as it will allow them to control your bot!&lt;/p&gt;
+&lt;h2&gt;2 Make the bot interactive&lt;/h2&gt;
+&lt;p&gt;
+    Because i am lazy and this is a block about programming, we will not control the bot directly via Discords REST API,
+    but rather use a prebuild python library (conveniently also named discord. Simply install it via pip and the fun can
+    begin:
+    &lt;img src="images/discordbot%237.PNG" style="display: block" vspace="15"&gt;
+    Then fire up your favorite Python IDE (or if you are daring a plain text editor) and begin typing. The first thing
+    we
+    need to do is to import the discord library and define the used client, which defines our connection to the discord
+    servers:
+    &lt;br&gt;
+&lt;pre style="color:#000020;background:#f6f8ff;"&gt;&lt;span style="color:#200080; font-weight:bold; "&gt;import&lt;/span&gt; discord
+client &lt;span style="color:#308080; "&gt;=&lt;/span&gt; discord&lt;span style="color:#308080; "&gt;.&lt;/span&gt;Client&lt;span style="color:#308080; "&gt;(&lt;/span&gt;&lt;span style="color:#308080; "&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+&lt;!--Created using ToHtml.com on 2019-06-19 19:48:53 UTC --&gt;
+After that we will override two very important functions, namely the &lt;code&gt;on_ready()&lt;/code&gt; and the &lt;code&gt;on_message(message)&lt;/code&gt;
+function. &lt;code&gt;on_ready()&lt;/code&gt; functions as a constructor/initializer for the bot. Here you can do various things,
+such as changing the "played game" of the bot via:
+&lt;pre style="color:#000020;background:#f6f8ff;"&gt;&lt;span style="color:#308080; "&gt;@&lt;/span&gt;client&lt;span style="color:#308080; "&gt;.&lt;/span&gt;event
+async &lt;span style="color:#200080; font-weight:bold; "&gt;def&lt;/span&gt; on_ready&lt;span style="color:#308080; "&gt;(&lt;/span&gt;&lt;span style="color:#308080; "&gt;)&lt;/span&gt;&lt;span style="color:#308080; "&gt;:&lt;/span&gt;
+    await client&lt;span style="color:#308080; "&gt;.&lt;/span&gt;change_presence&lt;span style="color:#308080; "&gt;(&lt;/span&gt;activity&lt;span style="color:#308080; "&gt;=&lt;/span&gt;discord&lt;span style="color:#308080; "&gt;.&lt;/span&gt;Game&lt;span style="color:#308080; "&gt;(&lt;/span&gt;name&lt;span style="color:#308080; "&gt;=&lt;/span&gt;&lt;span style="color:#1060b6; "&gt;"Awesome bot game"&lt;/span&gt;&lt;span style="color:#308080; "&gt;)&lt;/span&gt;&lt;span style="color:#308080; "&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+The &lt;code&gt;on_message(message)&lt;/code&gt; function serves as an event listener, which will be called every time a server
+member
+sends a message. This will allow us to interact with server members. Imagine we would want to add a "thumbs up" to every
+new message that occurs on the server.
+This, of course, would be really annoying behaviour, but since people seem to crave for likes, this may be what you want
+😉.
+&lt;pre style="color:#000020;background:#f6f8ff;"&gt;&lt;span style="color:#308080; "&gt;@&lt;/span&gt;client&lt;span style="color:#308080; "&gt;.&lt;/span&gt;event
+async &lt;span style="color:#200080; font-weight:bold; "&gt;def&lt;/span&gt; on_message&lt;span style="color:#308080; "&gt;(&lt;/span&gt;message&lt;span style="color:#308080; "&gt;)&lt;/span&gt;&lt;span style="color:#308080; "&gt;:&lt;/span&gt;
+    &lt;span style="color:#595979; "&gt;# Checks if the message was written by the bot. If so, abort&lt;/span&gt;
+    &lt;span style="color:#200080; font-weight:bold; "&gt;if&lt;/span&gt; message&lt;span style="color:#308080; "&gt;.&lt;/span&gt;author &lt;span style="color:#44aadd; "&gt;==&lt;/span&gt; client&lt;span style="color:#308080; "&gt;.&lt;/span&gt;user&lt;span style="color:#308080; "&gt;:&lt;/span&gt;
+        &lt;span style="color:#200080; font-weight:bold; "&gt;return&lt;/span&gt;
+    &lt;span style="color:#595979; "&gt;# Add a thumbs up to the new message&lt;/span&gt;
+    await message&lt;span style="color:#308080; "&gt;.&lt;/span&gt;add_reaction&lt;span style="color:#308080; "&gt;(&lt;/span&gt;&lt;span style="color:#1060b6; "&gt;"👍"&lt;/span&gt;&lt;span style="color:#308080; "&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+&lt;!--Created using ToHtml.com on 2019-06-19 20:19:05 UTC --&gt;
+To make the bot script actually runnable, we need to call the run method with the token of our bot:
+&lt;pre style="color:#000020;background:#f6f8ff;"&gt;client&lt;span style="color:#308080; "&gt;.&lt;/span&gt;run&lt;span style="color:#308080; "&gt;(&lt;/span&gt;&lt;span style="color:#1060b6; "&gt;"NTkwOTUwODQ0NTM5NjAwOTA5.XQqZKw.MCwgCKXPWtzagw2BMVHsLv1PISU"&lt;/span&gt;&lt;span style="color:#308080; "&gt;)&lt;/span&gt;
+&lt;/pre&gt;
+The only thing left to do is to run the script with Python.
+&lt;!--Created using ToHtml.com on 2019-06-19 20:22:52 UTC --&gt;
+&lt;table&gt;
+  &lt;tr&gt;
+    &lt;th&gt;Function&lt;/th&gt;
+    &lt;th&gt;Called when&lt;/th&gt;
+    &lt;th&gt;Parameters&lt;/th&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;on_typing&lt;/td&gt;
+    &lt;td&gt;someone is typing&lt;/td&gt;
+    &lt;td&gt;channel - The channel the typing occurs on&lt;br&gt;user - The typing user&lt;br&gt;when - When the typing started as a naive datetime in UTC&lt;br&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;on_message_delete&lt;/td&gt;
+    &lt;td&gt;someone deletes a message&lt;/td&gt;
+    &lt;td&gt;message - The deleted message&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;on_message_edit&lt;/td&gt;
+    &lt;td&gt;someone edits a message&lt;/td&gt;
+    &lt;td&gt;&lt;span style="font-style:italic"&gt;before&lt;/span&gt; - The message before editing&lt;br&gt;after - The message after editing&lt;br&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;on_reaction_add&lt;/td&gt;
+    &lt;td&gt;a reaction is added to a message&lt;/td&gt;
+    &lt;td&gt;&lt;span style="font-style:italic"&gt;reaction&lt;/span&gt;- The added reaction&lt;br&gt;message - The message the reaction was added to&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;on_reaction_remove&lt;/td&gt;
+    &lt;td&gt;a reaction was removed from a message&lt;/td&gt;
+    &lt;td&gt;&lt;span style="font-style:italic"&gt;reaction&lt;/span&gt; - The removed reaction&lt;br&gt;&lt;span style="font-style:italic"&gt;message&lt;/span&gt; - The message the reaction was removed from&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;on_member_join&lt;/td&gt;
+    &lt;td&gt;a user joins the server&lt;/td&gt;
+    &lt;td&gt;&lt;span style="font-style:italic"&gt;member&lt;/span&gt; - The member that is joining the server&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;on_member_leave&lt;/td&gt;
+    &lt;td&gt;a user leaves the server&lt;/td&gt;
+    &lt;td&gt;&lt;span style="font-style:italic"&gt;member &lt;/span&gt;- The member that is leaving the server&lt;/td&gt;
+  &lt;/tr&gt;
+  &lt;tr&gt;
+    &lt;td&gt;on_user_update&lt;/td&gt;
+    &lt;td&gt;a user updates his/her avatar/username/discriminator etc.&lt;/td&gt;
+    &lt;td&gt;&lt;span style="font-style:italic"&gt;before&lt;/span&gt; - The status before the edit&lt;br&gt;&lt;span style="font-style:italic"&gt;after&lt;/span&gt; - The status after the edit&lt;br&gt;&lt;/td&gt;
+  &lt;/tr&gt;
+&lt;/table&gt;
+&lt;/p&gt;
+&lt;p&gt;
+&lt;h2&gt;3 Add the bot to a server&lt;/h2&gt;
+To actually add the bot to the server, we first need to create an invite link people can use. To do so, we change to the
+OATH2 tab:
+&lt;img src="images/discordbot%238.PNG" style="display: block" vspace="15"&gt;
+There, we generate the link by selecting &lt;em&gt;bot&lt;/em&gt; under the scopes tab and copy the generated link. Because our bot
+should be able to add reactions to messages, we need to set the permissions integer to 64.
+&lt;img src="images/discordbot%239.PNG" style="display: block" vspace="15"&gt;
+&lt;strong&gt;Note: The permission integer can be calculated under Bot/Bot Permissions&lt;/strong&gt;&lt;br&gt;
+Then the link can be simply used to invite the bot to a server you have admin rights:&lt;br&gt;
+&lt;code&gt;https://discordapp.com/api/oauth2/authorize?client_id=590950844539600909&amp;permissions;=64&amp;scope;=bot&lt;/code&gt;
+
+&lt;h2&gt;4 Enjoy 😊&lt;/h2&gt;
+&lt;img src="images/discordbot%2310.gif" style="display: block" vspace="15"&gt;
+&lt;/p&gt;
+</content><category term="programming"></category><category term="discord"></category><category term="python"></category><category term="bot"></category><category term="automation"></category></entry><entry><title>Arbitrary Image Rotation using Shearing</title><link href="https://silmon.github.io/arbitrary-image-rotation-using-shearing.html" rel="alternate"></link><published>2019-06-16T00:00:00+02:00</published><updated>2019-06-16T00:00:00+02:00</updated><author><name>SilMon</name></author><id>tag:silmon.github.io,2019-06-16:/arbitrary-image-rotation-using-shearing.html</id><summary type="html">A description of an algorithm for arbitrary
+  image rotation using 3 consecutive shears, published by Alan W. Paeth in the year 1986.</summary><content type="html">
+&lt;p&gt;In the modern world of image processing, nobody thinks about about
+    “simple” tasks such as the rotation, shearing or mirroring of an image
+    because such functions have become so standardized, that even the
+    simplest photoviewers include them. Nevertheless, besides their
+    abundance, a lot of programmers do not know the underlying algorithms.
+    Whilst it is easy to understand the short transformation algorithms for shearing or mirroring
+    (which only include a few calculations and/or
+    assignment of values), algorithms for rotation of matrices (such as
+    images) through an arbitrary angle are more complex in comparison.&lt;/p&gt;
+&lt;p&gt;One of my favourite algorithms in the one presented by &lt;b&gt;Alan W. Paeth&lt;/b&gt; in the year 1986 (&lt;a href="http://www.cipprs.org/papers/VI/VI1986/pp077-081-Paeth-1986.pdf"&gt;Graphics Interface&lt;/a&gt;).
+    In this paper, Paeth describes a rotation algorithm which uses 3 consecutive shear operations to
+    perform arbitrary angle rotation. In contrast to many other rotation algorithms, Paeths method
+    produces exact values for for rotations with multiples of 90°&lt;/p&gt;
+&lt;h2&gt;Needed values&lt;/h2&gt;
+&lt;p&gt;
+    Peath defines 2 values needed to perform the shearing operations:
+&lt;/p&gt;
+&lt;ul&gt;
+    &lt;li&gt;α (alpha): Angle for X-Axis rotations&lt;/li&gt;
+    &lt;li&gt;β (beta): Angle for Y-Axis rotations&lt;/li&gt;
+&lt;/ul&gt;
+
+These two angles will be calculated from the given rotation angle θ (theta; in radians) with following
+formulas:
+&lt;ul&gt;
+    &lt;li&gt;α = -tan(θ/2)&lt;/li&gt;
+    &lt;li&gt;β = sin(θ)&lt;/li&gt;
+&lt;/ul&gt;
+
+These angles will then be used to perform the following 3 shear operations:
+&lt;ol&gt;
+    &lt;li&gt;x = x + α * y&lt;/li&gt;
+    &lt;li&gt;y = y + β * x&lt;/li&gt;
+    &lt;li&gt;x = x + α * y&lt;/li&gt;
+&lt;/ol&gt;
+
+If applied to each point of the image, these two shears will rotate the image through 45° (around the
+point 0|0). Due to the fact that the usual coordinate system in programming is upside down, the rotation
+is counterclockwise.
+
+
+&lt;h2&gt;Example&lt;/h2&gt;
+Imagine you would like to rotate an image or matrix through 45°. At first, you had to calculate α and β
+for the shear operations.
+To do so, you have to keep in mind that the algorithm uses the angle given in radians, so you have to
+first transform the given angle from degree to radians. This is easy done:
+&lt;ul&gt;
+    &lt;li&gt;θ&lt;sub&gt;radians&lt;/sub&gt; = θ * 0,0174533 = 45° * 0,0174533 = 0,7853985 rad&lt;/li&gt;
+&lt;/ul&gt;
+If you have the angle given in radians, you are able to calculate the respective shear angles:
+&lt;ul&gt;
+    &lt;li&gt;α = -tan(θ/2) = -tan(0,7853985/2) = -0,41 rad&lt;/li&gt;
+    &lt;li&gt;β = sin(θ) = sin(0,7853985) = 0,71 rad&lt;/li&gt;
+&lt;/ul&gt;
+These values are fixed throughout the rest of the algorithm, so the calculation has to be performed only
+once.
+
+After the calculation of the shearing angles, each point of the image has to be sheared.
+I will calculate the sheared points exemplary for 4 different points:
+&lt;ol&gt;
+    &lt;li&gt;P(0;0):
+        &lt;ul&gt;
+            &lt;li&gt;First shear: x = 0 + (-0,41) * 0 = 0&lt;/li&gt;
+            &lt;li&gt;Second shear: y = 0 + 0.71 * 0 = 0&lt;/li&gt;
+            &lt;li&gt;Third shear: x = 0 + (-0.41) * 0 = 0&lt;/li&gt;
+        &lt;/ul&gt;
+        X= 0 | Y= 0
+    &lt;/li&gt;
+    &lt;li&gt;P(1;0):
+        &lt;ul&gt;
+            &lt;li&gt;First shear: x = 1 + 0,41 * 0 = 1&lt;/li&gt;
+            &lt;li&gt;Second shear: y = 0 + 0.71 * 1 = 0.71&lt;/li&gt;
+            &lt;li&gt;Third shear: x = 1 + (-0.41 * 0.71) = 0.708&lt;/li&gt;
+        &lt;/ul&gt;
+        X= 0.708 | Y= 0.71
+    &lt;/li&gt;
+
+    &lt;li&gt;P(0;1):
+        &lt;ul&gt;
+            &lt;li&gt;First shear: x = 0 + (-0,41) * 1 = -0.41&lt;/li&gt;
+            &lt;li&gt;Second shear: y = 1 + 0.71 * (-0.41) = 0.707&lt;/li&gt;
+            &lt;li&gt;Third shear: x = -0.41 + (-0.41) * 0-707 = -0.71&lt;/li&gt;
+        &lt;/ul&gt;
+        X= -0.71 | Y= 0.707
+    &lt;/li&gt;
+    &lt;li&gt;P(1;1):
+        &lt;ul&gt;
+            &lt;li&gt;First shear: x = 1 + (-0,41) * 0 = 0.59&lt;/li&gt;
+            &lt;li&gt;Second shear: y = 1 + 0.71 * 0.59 = 1.41&lt;/li&gt;
+            &lt;li&gt;Third shear: x = 0.59 + (-0.41) * 1.41 = 0.00&lt;/li&gt;
+        &lt;/ul&gt;
+        X= 0.00 | Y= 1.41
+    &lt;/li&gt;
+&lt;/ol&gt;
+
+To use this values in an program, it's necessary to "normalize" them, meaning to eliminate all negative
+values. This can be done by determining the minimum value of each axis and add it to all calculated
+values, This ensures, that the minimal value is 0.
+
+&lt;h2&gt;Implementation&lt;/h2&gt;
+&lt;p&gt;
+    Here's an examplary implementation in Java:&lt;br&gt;
+    &lt;img src="https://66.media.tumblr.com/ea3706c44df13520f42496428df18c76/tumblr_p0ecy95rpA1uhkil3o1_540.png" alt="Exemplary code sample" vspace="15"&gt;
+    &lt;br&gt;
+    &lt;em&gt;Graphic representation of the rotation and normalization&lt;/em&gt;
+    &lt;img src="https://66.media.tumblr.com/58ffa4fcaad7f1f33940bc695775237a/tumblr_p0ed0sYCb41uhkil3o1_540.png" alt="Graphic representation of the rotation and normalization" vspace="15"&gt;
+&lt;/p&gt;
+</content><category term="rotation"></category><category term="shearing"></category><category term="java"></category><category term="matrix operations"></category><category term="image&#10;  filters"></category><category term="basic image operations"></category></entry></feed>
