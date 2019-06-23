@@ -82,24 +82,24 @@
 <p>
     The first that needs to be done is to create a bot is to log in into the <a href="https://discordapp.com/">
     discord page</a>. If you have no account, create one. Then switch to the <a href="https://discordapp.com/developers/applications/">
-    discord developer page</a> and create a new application: <img src="images/discordbot%231.png" style="display: block" vspace="15">
+    discord developer page</a> and create a new application: <img src="images/discordbot%231.png" style="display: block" class="img-fluid" vspace="15">
     To get you running you simply need to enter a name for your application: <img src="images/discordbot%232.PNG" style="display: block" vspace="15">
     After
-    that's done, you need to change to your created application (simply click on it) and then to bot: <img src="images/discordbot%233.PNG" style="display: block" vspace="15"> There you need to create a bot for your
+    that's done, you need to change to your created application (simply click on it) and then to bot: <img class="img-fluid" src="images/discordbot%233.PNG" style="display: block" vspace="15"> There you need to create a bot for your
     application
     (Discord will warn you that
-    this action is irreversible, but that's fine, we want this application to have a bot):<img src="images/discordbot%234.PNG" style="display: block" vspace="15"> You can then choose a "profil" name for the
+    this action is irreversible, but that's fine, we want this application to have a bot):<img class="img-fluid" src="images/discordbot%234.PNG" style="display: block" vspace="15"> You can then choose a "profil" name for the
     bot, which
     will be displayed
-    int the member list as well as an icon for the bot:<img src="images/discordbot%235.PNG" style="display: block" vspace="15"> The
-    next thing we need is the authorization token, which allows to control the bots actions via the discord API:<img src="images/discordbot%236.PNG" style="display: block" vspace="15">
+    int the member list as well as an icon for the bot:<img class="img-fluid" src="images/discordbot%235.PNG" style="display: block" vspace="15"> The
+    next thing we need is the authorization token, which allows to control the bots actions via the discord API:<img class="img-fluid" src="images/discordbot%236.PNG" style="display: block" vspace="15">
     Do not share this with anyone as it will allow them to control your bot!</p>
 <h2>2 Make the bot interactive</h2>
 <p>
     Because i am lazy and this is a block about programming, we will not control the bot directly via Discords REST API,
     but rather use a prebuild python library (conveniently also named discord. Simply install it via pip and the fun can
     begin:
-    <img src="images/discordbot%237.PNG" style="display: block" vspace="15">
+    <img class="img-fluid" src="images/discordbot%237.PNG" style="display: block" vspace="15">
     Then fire up your favorite Python IDE (or if you are daring a plain text editor) and begin typing. The first thing
     we
     need to do is to import the discord library and define the used client, which defines our connection to the discord
@@ -188,16 +188,16 @@ The only thing left to do is to run the script with Python.
 <h2>3 Add the bot to a server</h2>
 To actually add the bot to the server, we first need to create an invite link people can use. To do so, we change to the
 OATH2 tab:
-<img src="images/discordbot%238.PNG" style="display: block" vspace="15">
+<img class="img-fluid" src="images/discordbot%238.PNG" style="display: block" vspace="15">
 There, we generate the link by selecting <em>bot</em> under the scopes tab and copy the generated link. Because our bot
 should be able to add reactions to messages, we need to set the permissions integer to 64.
-<img src="images/discordbot%239.PNG" style="display: block" vspace="15">
+<img class="img-fluid" src="images/discordbot%239.PNG" style="display: block" vspace="15">
 <strong>Note: The permission integer can be calculated under Bot/Bot Permissions</strong><br>
 Then the link can be simply used to invite the bot to a server you have admin rights:<br>
 <code>https://discordapp.com/api/oauth2/authorize?client_id=590950844539600909&permissions;=64&scope;=bot</code>
 
 <h2>4 Enjoy 😊</h2>
-<img src="images/discordbot%2310.gif" style="display: block" vspace="15">
+<img class="img-fluid" src="images/discordbot%2310.gif" style="display: block" vspace="15">
 </p>
 
   </div>
